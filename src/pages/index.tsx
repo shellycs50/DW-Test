@@ -154,7 +154,7 @@ export default function Home() {
               <button
                 aria-label="Leave"
                 onClick={() => tryToLeave()}
-                className="rounded-br-2xl bg-gray-100 hover:bg-gray-200 p-5 shadow-xl group"
+                className="rounded-br-2xl bg-gray-100 hover:bg-gray-200 p-2 md:p-5 shadow-xl group"
               >
                 <BackspaceIcon className="h-8 w-8 text-indigo-600 group-hover:text-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" />
               </button>
@@ -164,18 +164,18 @@ export default function Home() {
               survey={surveyData}
               debouncedSaveSurveyToLocal={debouncedSaveSurveyToLocal}
             />
-            <div className="flex w-full flex-col items-center justify-center gap-3 md:flex-row md:justify-between">
+            <div className="flex w-full flex-col items-center justify-center gap-3 sm:flex-row sm:justify-between">
               <button
                 onClick={() => {
                   setNotes(notesStateCache);
                 }}
-                className="rounded-md bg-indigo-600 px-3.5 md:px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 "
+                className="w-1/2 sm:w-1/3 md:w-1/4 lg:w-2/12 rounded-md bg-indigo-600 px-3.5  py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 "
               >
                 Revert
               </button>
               <button
                 onClick={updateSurveyHandler}
-                className="rounded-md bg-indigo-600 px-3.5 md:px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="w-1/2 sm:w-1/3  md:w-1/4 lg:w-2/12 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Update
               </button>
