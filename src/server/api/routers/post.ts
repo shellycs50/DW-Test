@@ -45,13 +45,16 @@ export const postRouter = createTRPCRouter({
       }
     }),
   updateSurvey: publicProcedure
-    .input(z.object({ id: z.string(), notes: z.string() }))
+    .input(
+      z.object({ id: z.string(), created_at: z.string(), notes: z.string() }),
+    )
     .mutation(async ({ input }) => {
       try {
         const key = process.env.API_KEY;
         if (!key) {
           throw new Error("API_KEY is not set");
         }
+
         const res = await fetch(
           `https://mmyaxhazugbcfqmjryjz.supabase.co/rest/v1/survey?id=eq.${input.id}`,
           {
@@ -60,20 +63,28 @@ export const postRouter = createTRPCRouter({
               apikey: process.env.API_KEY!,
               "Content-Type": "application/json",
             },
-
-            body: JSON.stringify({ notes: input.notes }),
+            body: JSON.stringify({ ...input }),
           },
         );
+        console.log(res.status);
         switch (res.status) {
-          case 200:
-            const json: unknown = await res.json();
-            const survey = SurveySchema.parse(json);
-            return { message: "Success!", survey };
+          case 204:
+            return { message: "Success!" };
           case 400:
-            return { message: "Invalid request.", error: "NOT_FOUND" };
+            const json_400: unknown = await res.json();
+            console.log(json_400);
+            return {
+              message: "Invalid request.",
+              error: "NOT_FOUND",
+              code: res.status,
+            };
           case 500:
+            const json_500: unknown = await res.json();
+            console.log(json_500);
             return { message: "Internal server error.", error: "SERVER_ERROR" };
           default:
+            const json_default: unknown = await res.json();
+            console.log(json_default);
             return { message: "Unexpected Error", error: "UNKNOWN_ERROR" };
         }
       } catch (error) {

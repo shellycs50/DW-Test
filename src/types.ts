@@ -7,4 +7,4 @@ export const SurveyBaseSchema = z.object({
 });
 
 export const SurveySchema = z.array(SurveyBaseSchema);
-export type Survey = z.infer<typeof SurveySchema>;
+export type Survey = z.infer<typeof SurveyBaseSchema>;
