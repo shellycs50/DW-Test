@@ -1,9 +1,10 @@
 import Head from "next/head";
 import React, { useCallback, useEffect, useState } from "react";
-import { SurveySchema, type Survey } from "~/types";
+import { SurveyBaseSchema, type Survey } from "~/types";
 import debounce from "lodash.debounce";
 import { api } from "~/utils/api";
-
+import IdInput from "~/components/IdInput";
+import { ToastContainer, toast } from 'react-toastify'
 export default function Home() {
   const CACHE_KEY = "edit-survey-unsaved";
   const [postId, setPostId] = useState("");
@@ -11,19 +12,27 @@ export default function Home() {
   const [surveyData, setSurveyData] = useState({
     id: "",
     notes: "",
-    createdAt: "",
+    created_at: "",
   });
   const setNotes = (notes: string) => {
     setSurveyData((prev) => ({ ...prev, notes }));
   };
   const [notesStateCache, setNotesStateCache] = useState("");
 
+  const successToast = (message: string) => toast(message, {
+    type: "success",
+    position: 'bottom-right'
+  })
+  const errorToast = (message: string) => toast(message, {
+    type: "error",
+    position: 'bottom-right'
+  })
   useEffect(() => {
     try {
       const data = localStorage.getItem(CACHE_KEY);
       if (!data) return;
       const json: unknown = JSON.parse(data);
-      const parsed = SurveySchema.parse(json);
+      const parsed = SurveyBaseSchema.parse(json);
       setSurveyData(parsed);
       setNotesStateCache(parsed.notes);
     } catch (error) {
@@ -45,27 +54,42 @@ export default function Home() {
   const deleteSurveyFromLocal = () => {
     localStorage.removeItem(CACHE_KEY);
   };
-
   const { mutate: getSurveyById } = api.post.getSurvey.useMutation({
     onSuccess: (data) => {
-      if (error) {
-        // toast with message
+      if (!data.survey || data.error) {
+        setError(true)
+      } else {
+        setError(false)
+        setSurveyData(data.survey)
+
       }
-      setError(false)
-      deleteSurveyFromLocal()
-      setSurveyData(data.survey!) //error means that survey is here
     },
-    onError: (error) => {
-      if (error.message) {
-        // toast with message
-      }
-      setError(true);
+    onError: (data) => {
+      setError(true)
+      console.log(data.message)
     }
   })
+  // const { mutate: getSurveyById } = api.post.getSurvey.useMutation({
+  //   onSuccess: (data) => {
+  //     if (error) {
+  //       // toast with message
+  //     }
+  //     setError(false)
+  //     deleteSurveyFromLocal()
+  //     setSurveyData(data.survey!) //error means that survey is here
+  //   },
+  //   onError: (error) => {
+  //     if (error.message) {
+  //       // toast with message
+  //     }
+  //     setError(true);
+  //   }
+  // })
 
-  function getSurvey(e: React.FormEvent) {
+  function getSurveyHandler(e: React.FormEvent) {
     e.preventDefault()
-    getSurveyById({ id: postId })
+    const input = { id: postId }
+    getSurveyById(input)
   }
 
   const { mutate: updateSurvey } = api.post.updateSurvey.useMutation({
@@ -82,6 +106,8 @@ export default function Home() {
     }
   })
 
+
+
   return (
     <>
       <Head>
@@ -90,7 +116,26 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center">
-
+        <pre className="fixed">{JSON.stringify({ postId })}</pre>
+        {
+          !surveyData.id ? (
+            <form
+              className="bg-gray-200 p-5 shadow-2xl flex flex-col gap-5 rounded-2xl"
+              onSubmit={getSurveyHandler}
+            >
+              <IdInput postId={postId} setPostId={setPostId} error={error} />
+              <button
+                className=" w-1/3 self-end rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                type='submit'
+              >
+                submit</button>
+            </form>
+          ) : (
+            //text area
+            <div></div>
+          )
+        }
+        <ToastContainer />
       </main>
     </>
   );

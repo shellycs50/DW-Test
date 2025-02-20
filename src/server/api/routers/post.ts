@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 import { SurveySchema } from "~/types";
-
+import process from "process";
 export const postRouter = createTRPCRouter({
   getSurvey: publicProcedure
     .input(z.object({ id: z.string() }))
@@ -18,14 +18,19 @@ export const postRouter = createTRPCRouter({
           {
             method: "GET",
             headers: {
-              apikey: process.env.API_KEY!,
+              apikey: process.env.API_KEY!.toString(),
             },
           },
         );
         switch (res.status) {
           case 200:
             const json: unknown = await res.json();
-            const survey = SurveySchema.parse(json);
+            console.log(json);
+            const surveyArray = SurveySchema.parse(json);
+            const survey = surveyArray[0];
+            if (!survey) {
+              throw new Error("Survey not found");
+            }
             return { message: "Success!", survey };
           case 400:
             return { message: "Invalid request.", error: "NOT_FOUND" };
