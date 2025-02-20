@@ -18,7 +18,7 @@ export const postRouter = createTRPCRouter({
           {
             method: "GET",
             headers: {
-              apikey: process.env.API_KEY!.toString(),
+              apikey: process.env.API_KEY!,
             },
           },
         );
