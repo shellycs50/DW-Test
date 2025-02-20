@@ -1,23 +1,86 @@
 import Head from "next/head";
-import { useState } from "react";
-
-
+import React, { useCallback, useEffect, useState } from "react";
+import { SurveySchema, type Survey } from "~/types";
+import debounce from "lodash.debounce";
 import { api } from "~/utils/api";
 
 export default function Home() {
-
-  const CACHE_KEY = 'edit-survey-unsaved'
-  const [postId, setPostId] = useState("")
-  const [error, setError] = useState(false)
+  const CACHE_KEY = "edit-survey-unsaved";
+  const [postId, setPostId] = useState("");
+  const [error, setError] = useState(false);
   const [surveyData, setSurveyData] = useState({
     id: "",
     notes: "",
     createdAt: "",
-  })
+  });
   const setNotes = (notes: string) => {
-    setSurveyData((prev) => ({ ...prev, notes }))
+    setSurveyData((prev) => ({ ...prev, notes }));
+  };
+  const [notesStateCache, setNotesStateCache] = useState("");
+
+  useEffect(() => {
+    try {
+      const data = localStorage.getItem(CACHE_KEY);
+      if (!data) return;
+      const json: unknown = JSON.parse(data);
+      const parsed = SurveySchema.parse(json);
+      setSurveyData(parsed);
+      setNotesStateCache(parsed.notes);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
+  const saveSurveyToLocal = useCallback((survey: Survey) => {
+    const json = JSON.stringify(survey);
+    localStorage.setItem(CACHE_KEY, json);
+  }, []);
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const debouncedSaveSurveyToLocal = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    debounce(saveSurveyToLocal, 1000),
+    [],
+  );
+  const deleteSurveyFromLocal = () => {
+    localStorage.removeItem(CACHE_KEY);
+  };
+
+  const { mutate: getSurveyById } = api.post.getSurvey.useMutation({
+    onSuccess: (data) => {
+      if (error) {
+        // toast with message
+      }
+      setError(false)
+      deleteSurveyFromLocal()
+      setSurveyData(data.survey!) //error means that survey is here
+    },
+    onError: (error) => {
+      if (error.message) {
+        // toast with message
+      }
+      setError(true);
+    }
+  })
+
+  function getSurvey(e: React.FormEvent) {
+    e.preventDefault()
+    getSurveyById({ id: postId })
   }
-  const [notesStateCache, setNotesStateCache] = useState("")
+
+  const { mutate: updateSurvey } = api.post.updateSurvey.useMutation({
+    onMutate(_variables) {
+      setNotesStateCache(surveyData.notes);
+    },
+    onSuccess: (data) => {
+      // toast success
+    },
+    onError: (error) => {
+      if (error.message) {
+        // toast with message
+      }
+    }
+  })
 
   return (
     <>

@@ -5,3 +5,5 @@ export const SurveySchema = z.object({
   notes: z.string(),
   createdAt: z.string(),
 });
+
+export type Survey = z.infer<typeof SurveySchema>;
