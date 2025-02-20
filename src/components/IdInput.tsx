@@ -3,7 +3,7 @@ import clsx from 'clsx'
 
 export default function IdInput({ postId, setPostId, error }: { postId: string, setPostId: (postId: string) => void, error: boolean }) {
     return (
-        <div>
+        <div className='w-full'>
             <label htmlFor="survey-id" className="block text-sm/6 font-medium text-gray-900">
                 Enter your survey ID
             </label>

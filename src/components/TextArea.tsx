@@ -17,8 +17,7 @@ export default function TextArea({ setNotes, survey, debouncedSaveSurveyToLocal 
                     id="editor"
                     name="editor"
                     rows={4}
-                    className="h-[50vh] text-base md:text-large lg:text-lg block w-full rounded-md bg-white px-3 py-1.5 text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                    defaultValue={''}
+                    className="h-[50vh] md:[60vh]  text-base md:text-large lg:text-lg block w-full rounded-md bg-white px-3 py-1.5 text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 />
             </div>
         </div>

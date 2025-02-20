@@ -71,8 +71,7 @@ export const postRouter = createTRPCRouter({
           case 204:
             return { message: "Success!" };
           case 400:
-            const json_400: unknown = await res.json();
-            console.log(json_400);
+            console.log(await res.json());
             return {
               message: "Invalid request.",
               error: "NOT_FOUND",
