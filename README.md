@@ -1,29 +1,19 @@
-# Create T3 App
+# Digital Wonderlab Tech Test
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+### This is a user interface for the given Survey API.
 
-## What's next? How do I make an app with this?
+#
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+CLI setup:
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+```sh
+   git clone git@github.com:shellycs50/DW-Test.git
+   cd DW-Test
+   npm install
+   npm run dev
+```
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+### Assumptions
 
-## Learn More
-
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
-
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+I have assumed that the point of this exercise is to create a responsive, usable user interface in the given time. However, given more time, I would have a completely different maintainability focussed approach.
+For example, I would want to make and encorporate more reusable components. I'd like to use server side props to separate the id input and editor pages. This way component logic can be separated as there is arguably too much going on in index.tsx
