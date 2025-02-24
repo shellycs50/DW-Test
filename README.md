@@ -34,10 +34,12 @@ I have assumed that the point of this exercise is to create a responsive, functi
 ### Specifics
 
 
-- Client side validation of ID input only handles empty input cases. I would have liked to have got the client to run some basic validation with a regex (8 alphanum chars, dash, 4 alphanum chars) etc. 
+- Client side validation of ID input. I would have liked to have got the client to run some basic validation with a regex to reduce server load (8 alphanum chars, dash, 4 alphanum chars etc).
+
+- Throttling requests to reduce server load with lodash.throttle. 
 
 - I decided to update the state cache when the user clicks update. In hindsight I'd rather this was done once the update succeeds. This way they still get warned when leaving after an unsuccessful request. 
 
-- The backend logic needs a few more minutes. For example - if the APIs response to GET fails to parse, it's currently being caught by the catch and will return a generic unknown error message. I should be using safeParse and returning a message based on the result. 
+- The backend logic needs a few more minutes. For example - if the APIs response to GET fails to parse, it's currently being caught by the catch and will return a generic unknown error message. I should be using ZOD safeParse and returning a message based on the result. 
 
 - I'd like to have added a bit more style to the page like some background SVGs for some character.
